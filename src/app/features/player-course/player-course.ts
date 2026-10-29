@@ -1,5 +1,5 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
 import { Modules } from '../../shared/components/modules/modules';
 import { CourseService } from '../../services/course_service';
@@ -16,6 +16,7 @@ import { toDrivePreviewUrl } from '../../utilities/drive_img_extract';
 export class PlayerCourse implements OnInit {
 
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private courseService = inject(CourseService);
   private enrollmentsService = inject(EnrollmentsService);
   private sanitizer = inject(DomSanitizer);
@@ -124,6 +125,14 @@ export class PlayerCourse implements OnInit {
     }
 
     this.activeClassId.set(aula.class_id);
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { classId: aula.class_id },
+      queryParamsHandling: 'merge',
+      replaceUrl: true
+    });
+
     this.isLoadingClass.set(true);
     this.errorMessage.set(null);
 
